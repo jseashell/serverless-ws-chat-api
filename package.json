@@ -1,0 +1,12 @@
+{
+  "name": "finnhub-api",
+  "version": "0.0.1",
+  "description": "Serverless AWS websocket API serving Finnhub live data",
+  "author": "John Schellinger",
+  "private": true,
+  "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.87.0",
+    "@aws-sdk/client-dynamodb": "^3.87.0",
+    "ws": "^8.6.0"
+  }
+}
