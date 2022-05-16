@@ -1,12 +1,13 @@
 {
   "name": "finnhub-api",
   "version": "0.0.1",
-  "description": "Serverless AWS websocket API serving Finnhub live data",
+  "description": "Serverless AWS websocket API providing Finnhub live data",
   "author": "John Schellinger",
   "private": true,
   "scripts": {
     "serverless": "serverless",
-    "invoke:connect": "npm run serverless -- invoke local -f src/functions/handler.connectHandler"
+    "invoke:connect": "npm run serverless -- invoke local -f connectHandler -p mock.json",
+    "invoke:disconnect": "npm run serverless -- invoke local -f disconnectHandler -p mock.json"
   },
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.87.0",
