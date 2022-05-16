@@ -5,7 +5,14 @@ provider:
   name: aws
   runtime: nodejs16.x
   environment:
-    CONNECTION_DB_TABLE: ${self:resources.Resources.FinnhubApiWsConnectionTable.Properties.TableName}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
+    CONNECTION_TABLE: ${self:resources.Resources.FinnhubApiWsConnectionTable.Properties.TableName}
+  websocketsApiName: ${self:service}-ws
+  websocketsApiRouteSelectionExpression: $request.body.action # custom routes are selected by the value of the action property in the body
+  websocketsDescription: Finnhub Websocket API
+  logs:
+    websocket: true
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -20,11 +27,9 @@ provider:
         - 'execute-api:ManageConnections'
       Resource:
         - 'arn:aws:execute-api:*:*:**/@connections/*'
-  websocketsApiName: ${self:service}-ws
-  websocketsApiRouteSelectionExpression: $request.body.action # custom routes are selected by the value of the action property in the body
-  websocketsDescription: Finnhub Websocket API
-  logs:
-    websocket: true
+
+package:
+  individually: true
 
 functions:
   connectHandler:
@@ -42,11 +47,11 @@ functions:
     events:
       - websocket:
           route: $default
-  broadcastHandler:
-    handler: handler.broadcastHandler
+  sendMessageHandler:
+    handler: handler.sendMessageHandler
     events:
       - websocket:
-          route: broadcastMessage
+          route: sendMessage
 
 resources:
   Resources:

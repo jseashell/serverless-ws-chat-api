@@ -2,7 +2,7 @@
   "arrowParens": "always",
   "bracketSpacing": true,
   "endOfLine": "auto",
-  "printWidth": 120,
+  "printWidth": 80,
   "quoteProps": "as-needed",
   "tabWidth": 2,
   "trailingComma": "es5",

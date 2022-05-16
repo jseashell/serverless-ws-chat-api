@@ -4,9 +4,15 @@
   "description": "Serverless AWS websocket API serving Finnhub live data",
   "author": "John Schellinger",
   "private": true,
+  "scripts": {
+    "serverless": "serverless",
+    "invoke:connect": "npm run serverless -- invoke local -f src/functions/handler.connectHandler"
+  },
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.87.0",
-    "@aws-sdk/client-dynamodb": "^3.87.0",
-    "ws": "^8.6.0"
+    "@aws-sdk/client-dynamodb": "^3.87.0"
+  },
+  "devDependencies": {
+    "serverless": "^3.0.0"
   }
 }
