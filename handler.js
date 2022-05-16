@@ -93,7 +93,7 @@ const getAllConnections = () => {
   return client.send(command);
 };
 
-const addConnection = (connectionId) => {
+const addConnection = async (connectionId) => {
   const command = new PutItemCommand({
     TableName: connectionTable,
     Item: {
@@ -104,18 +104,16 @@ const addConnection = (connectionId) => {
   });
 
   const client = new DynamoDBClient({ region: process.env.REGION });
-  return client
-    .send(command)
-    .then((data) => {
-      console.info('New connection', { data });
-      return data;
-    })
-    .catch((error) => {
-      console.error('Failed to add connection', { error });
-    });
+  try {
+    const data = await client.send(command);
+    console.info('New connection', { data });
+    return data;
+  } catch (error) {
+    console.error('Failed to add connection', { error });
+  }
 };
 
-const deleteConnection = (connectionId) => {
+const deleteConnection = async (connectionId) => {
   const command = new DeleteItemCommand({
     TableName: connectionTable,
     Key: {
@@ -126,15 +124,13 @@ const deleteConnection = (connectionId) => {
   });
 
   const client = new DynamoDBClient({ region: process.env.REGION });
-  return client
-    .send(command)
-    .then((data) => {
-      console.info('Deleted connection', { data });
-      return data;
-    })
-    .catch((error) => {
-      console.error('Failed to delete connection', { error });
-    });
+  try {
+    const data = await client.send(command);
+    console.info('Deleted connection', { data });
+    return data;
+  } catch (error) {
+    console.error('Failed to delete connection', { error });
+  }
 };
 
 // TODO
