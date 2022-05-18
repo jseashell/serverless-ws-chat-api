@@ -11,37 +11,35 @@ const {
 
 const connectionTable = process.env.CONNECTION_TABLE;
 
-const formatJsonResponse = (body) => {
-  return {
-    statusCode: 200,
-    body: body || {},
-  };
+const successfulResponse = {
+  statusCode: 200,
+  body: 'Success',
 };
 
 const formatJsonError = (statusCode, err) => {
   return {
     statusCode: statusCode,
-    body: { err },
+    body: JSON.stringify({ err }),
   };
 };
 
 module.exports.connectHandler = async (event, context, callback) => {
   addConnection(event.requestContext.connectionId)
     .then(() => {
-      callback(formatJsonResponse(), null);
+      callback(null, successfulResponse);
     })
     .catch((err) => {
-      callback(null, formatJsonError(500, err));
+      callback(formatJsonError(500, err));
     });
 };
 
 module.exports.disconnectHandler = async (event, context, callback) => {
   deleteConnection(event.requestContext.connectionId)
     .then(() => {
-      callback(formatJsonResponse(), null);
+      callback(null, successfulResponse);
     })
     .catch((err) => {
-      callback(null, formatJsonError(500, err));
+      callback(formatJsonError(500, err));
     });
 };
 
@@ -50,22 +48,22 @@ module.exports.defaultHandler = async (event, context, callback) => {
   callback(null, formatJsonError(404, 'No handler found'));
 };
 
-module.exports.sendMessageHandler = async (event, context, callback) => {
-  getAllConnections()
-    .then((connectionData) => {
-      const postData = event.body.data;
-      connectionData.Items.map(
-        (connectionDataItem) => connectionDataItem.connectionId.S
-      ).forEach((connectionId) => {
-        send(event, connectionId, postData);
-      });
-      console.info('Broadcasted a message', { data });
-      callback(formatJsonResponse(), null);
+module.exports.sendMessageHandler = (event, context, callback) => {
+  sendMessageToAllConnected(event)
+    .then(() => {
+      callback(null, successfulResponse);
     })
     .catch((err) => {
-      console.error('Failed to broadcast message', err);
-      callback(null, formatJsonError(500, err));
+      callback(failedResponse(500, JSON.stringify(err)));
     });
+};
+
+const sendMessageToAllConnected = (event) => {
+  return getAllConnections().then((connectionData) => {
+    return connectionData.Items.map((connectionId) => {
+      return send(event, connectionId.connectionId);
+    });
+  });
 };
 
 const send = (event, connectionId, postData) => {
@@ -76,12 +74,16 @@ const send = (event, connectionId, postData) => {
     endpoint: endpoint,
   });
 
+  if (typeof postData === 'object') {
+    postData = JSON.stringify(postData);
+  }
+
   const command = new PostToConnectionCommand({
     ConnectionId: connectionId,
     Data: postData,
   });
 
-  client.send(command);
+  return client.send(command);
 };
 
 const getAllConnections = () => {
