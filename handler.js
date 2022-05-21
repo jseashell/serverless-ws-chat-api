@@ -19,42 +19,47 @@ const successfulResponse = {
 const formatJsonError = (statusCode, err) => {
   return {
     statusCode: statusCode,
-    body: JSON.stringify({ err }),
+    body: JSON.stringify({
+      error: {
+        message: err.messge,
+        stack: err.stack,
+      },
+    }),
   };
 };
 
-module.exports.connectHandler = async (event, context, callback) => {
-  addConnection(event.requestContext.connectionId)
+module.exports.connectHandler = async (event, _context, _callback) => {
+  return addConnection(event.requestContext.connectionId)
     .then(() => {
-      callback(null, successfulResponse);
+      return successfulResponse;
     })
     .catch((err) => {
-      callback(formatJsonError(500, err));
+      return formatJsonError(500, err);
     });
 };
 
-module.exports.disconnectHandler = async (event, context, callback) => {
-  deleteConnection(event.requestContext.connectionId)
+module.exports.disconnectHandler = async (event) => {
+  return deleteConnection(event.requestContext.connectionId)
     .then(() => {
-      callback(null, successfulResponse);
+      return successfulResponse;
     })
     .catch((err) => {
-      callback(formatJsonError(500, err));
+      return formatJsonError(500, err);
     });
 };
 
-module.exports.defaultHandler = async (event, context, callback) => {
+module.exports.defaultHandler = async (event, _context, _callback) => {
   console.warn(`Default handler invoked:\n${event}`);
-  callback(null, formatJsonError(404, 'No handler found'));
+  return formatJsonError(404, 'No handler found');
 };
 
-module.exports.sendMessageHandler = (event, context, callback) => {
-  sendMessageToAllConnected(event)
+module.exports.sendMessageHandler = async (event, _context, _callback) => {
+  return sendMessageToAllConnected(event)
     .then(() => {
-      callback(null, successfulResponse);
+      return successfulResponse;
     })
     .catch((err) => {
-      callback(failedResponse(500, JSON.stringify(err)));
+      return failedResponse(500, JSON.stringify(err));
     });
 };
 
