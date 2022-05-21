@@ -80,11 +80,11 @@ module.exports.defaultHandler = async (event, _context, _callback) => {
   return formatJsonError(404, 'No handler found');
 };
 
-module.exports.broadcast = async (event, _context, _callback) => {
+module.exports.send = async (event, _context, _callback) => {
   return getAllConnections()
     .then((connectionData) => {
       connectionData.Items?.forEach((connection) => {
-        send(event, connection.connectionId?.S);
+        sendToConnection(event, connection.connectionId?.S);
       });
     })
     .then(() => ({
@@ -103,7 +103,7 @@ const getAllConnections = async () => {
   return client.send(command);
 };
 
-const send = (event, connectionId) => {
+const sendToConnection = (event, connectionId) => {
   if (!event.body?.data || event.body?.data?.length == 0) {
     throw new Error('Cannot broadcast an empty message');
   }

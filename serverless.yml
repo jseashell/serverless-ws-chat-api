@@ -40,26 +40,26 @@ package:
   individually: true
 
 functions:
-  connectHandler:
+  connect:
     handler: handler.connect
     events:
       - websocket:
           route: $connect
-  disconnectHandler:
+  disconnect:
     handler: handler.disconnect
     events:
       - websocket:
           route: $disconnect
-  defaultHandler:
+  default:
     handler: handler.defaultHandler
     events:
       - websocket:
           route: $default
-  sendMessageHandler:
-    handler: handler.sendMessage
+  send:
+    handler: handler.send
     events:
       - websocket:
-          route: sendMessage
+          route: send
           routeResponseSelectionExpression: $default
 
 resources:
