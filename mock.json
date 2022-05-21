@@ -1,5 +1,1 @@
-{
-  "requestContext": {
-    "connectionId": "00000-test-conn-00000"
-  }
-}
+{ "action": "sendMessage", "data": "Hello World!" }
