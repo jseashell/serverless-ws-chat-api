@@ -59,7 +59,7 @@ module.exports.sendMessageHandler = async (event, _context, _callback) => {
       return successfulResponse;
     })
     .catch((err) => {
-      return failedResponse(500, JSON.stringify(err));
+      return formatJsonError(500, JSON.stringify(err));
     });
 };
 
