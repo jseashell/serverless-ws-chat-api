@@ -4,15 +4,20 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs16.x
+
   websocketsApiName: ${self:service}
   websocketsApiRouteSelectionExpression: $request.body.action # custom routes are selected by the value of the action property in the body
   websocketsDescription: Finnhub Websocket API
+  
   logs:
+    lambda: true
     websocket: true
+  
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
     CONNECTION_TABLE: ${self:resources.Resources.FinnhubApiWsConnectionTable.Properties.TableName}
+  
   iam:
     role:
       statements:
