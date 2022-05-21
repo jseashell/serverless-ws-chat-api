@@ -10,7 +10,7 @@ provider:
   websocketsDescription: Finnhub Websocket API
   
   logs:
-    lambda: true
+    frameworkLambda: true
     websocket: true
   
   environment:
