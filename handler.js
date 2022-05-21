@@ -13,7 +13,6 @@ const connectionTable = process.env.CONNECTION_TABLE;
 
 const successfulResponse = {
   statusCode: 200,
-  body: 'Success',
 };
 
 const formatJsonError = (statusCode, err) => {
@@ -28,79 +27,14 @@ const formatJsonError = (statusCode, err) => {
   };
 };
 
-module.exports.connectHandler = async (event, _context, _callback) => {
-  return addConnection(event.requestContext.connectionId)
-    .then(() => {
-      return successfulResponse;
-    })
-    .catch((err) => {
-      return formatJsonError(500, err);
-    });
-};
-
-module.exports.disconnectHandler = async (event) => {
-  return deleteConnection(event.requestContext.connectionId)
-    .then(() => {
-      return successfulResponse;
-    })
-    .catch((err) => {
-      return formatJsonError(500, err);
-    });
-};
-
-module.exports.defaultHandler = async (event, _context, _callback) => {
-  console.warn(`Default handler invoked:\n${event}`);
-  return formatJsonError(404, 'No handler found');
-};
-
-module.exports.sendMessageHandler = async (event, _context, _callback) => {
-  return sendMessageToAllConnected(event)
-    .then(() => {
-      return successfulResponse;
-    })
-    .catch((err) => {
-      return formatJsonError(500, err);
-    });
-};
-
-const sendMessageToAllConnected = (event) => {
-  return getAllConnections().then((connectionData) => {
-    return connectionData.Items.map((connectionId) => {
-      return send(event, connectionId.connectionId);
-    });
-  });
-};
-
-const send = (event, connectionId, postData) => {
-  const endpoint =
-    event.requestContext.domainName + '/' + event.requestContext.stage;
-  const client = new ApiGatewayManagementApiClient({
-    region: process.env.REGION,
-    endpoint: endpoint,
-  });
-
-  if (typeof postData === 'object') {
-    postData = JSON.stringify(postData);
+module.exports.connect = async (event, _context, _callback) => {
+  const connectionId = event.requestContext?.connectionId;
+  if (!connectionId) {
+    throw new Error(
+      `Cannot add connection. Invalid connection ID "${connectionId}"`
+    );
   }
 
-  const command = new PostToConnectionCommand({
-    ConnectionId: connectionId,
-    Data: postData,
-  });
-
-  return client.send(command);
-};
-
-const getAllConnections = () => {
-  const client = new DynamoDBClient({ region: process.env.REGION });
-  const command = new ScanCommand({
-    TableName: connectionTable,
-    ProjectionExpression: 'connectionId',
-  });
-  return client.send(command);
-};
-
-const addConnection = async (connectionId) => {
   const command = new PutItemCommand({
     TableName: connectionTable,
     Item: {
@@ -111,16 +45,20 @@ const addConnection = async (connectionId) => {
   });
 
   const client = new DynamoDBClient({ region: process.env.REGION });
-  try {
-    const data = await client.send(command);
-    console.info('New connection', { data });
-    return data;
-  } catch (error) {
-    console.error('Failed to add connection', { error });
-  }
+  return client
+    .send(command)
+    .then(() => successfulResponse)
+    .catch((err) => formatJsonError(500, err));
 };
 
-const deleteConnection = async (connectionId) => {
+module.exports.disconnect = async (event) => {
+  const connectionId = event.requestContext?.connectionId;
+  if (!connectionId) {
+    throw new Error(
+      `Cannot delete connection. Invalid connection ID "${connectionId}"`
+    );
+  }
+
   const command = new DeleteItemCommand({
     TableName: connectionTable,
     Key: {
@@ -131,13 +69,61 @@ const deleteConnection = async (connectionId) => {
   });
 
   const client = new DynamoDBClient({ region: process.env.REGION });
-  try {
-    const data = await client.send(command);
-    console.info('Deleted connection', { data });
-    return data;
-  } catch (error) {
-    console.error('Failed to delete connection', { error });
+  return client
+    .send(command)
+    .then(() => successfulResponse)
+    .catch((err) => formatJsonError(500, err));
+};
+
+module.exports.defaultHandler = async (event, _context, _callback) => {
+  console.warn(`Default handler invoked:\n${event}`);
+  return formatJsonError(404, 'No handler found');
+};
+
+module.exports.broadcast = async (event, _context, _callback) => {
+  return getAllConnections()
+    .then((connectionData) => {
+      connectionData.Items?.forEach((connection) => {
+        send(event, connection.connectionId?.S);
+      });
+    })
+    .then(() => ({
+      statusCode: 200,
+      body: '...Sent!',
+    }))
+    .catch((err) => formatJsonError(500, err));
+};
+
+const getAllConnections = async () => {
+  const client = new DynamoDBClient({ region: process.env.REGION });
+  const command = new ScanCommand({
+    TableName: connectionTable,
+    ProjectionExpression: 'connectionId',
+  });
+  return client.send(command);
+};
+
+const send = (event, connectionId) => {
+  if (!event.body?.data || event.body?.data?.length == 0) {
+    throw new Error('Cannot broadcast an empty message');
   }
+
+  const postData = JSON.parse(event.body).data; // Lambda Proxy integration always has a string body
+
+  if (typeof postData === 'object') {
+    postData = JSON.stringify(postData);
+  }
+
+  console.debug('POST TO CONNECTION', connectionId);
+  const command = new PostToConnectionCommand({
+    ConnectionId: connectionId,
+    Data: postData,
+  });
+
+  new ApiGatewayManagementApiClient({
+    region: process.env.REGION,
+    endpoint: `https://${event.requestContext.domainName}/${event.requestContext.stage}`,
+  }).send(command);
 };
 
 // TODO

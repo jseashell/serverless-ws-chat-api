@@ -32,6 +32,7 @@ provider:
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
+            - 'execute-api:Invoke'
           Resource:
             - 'arn:aws:execute-api:*:*:**/@connections/*'
 
@@ -40,12 +41,12 @@ package:
 
 functions:
   connectHandler:
-    handler: handler.connectHandler
+    handler: handler.connect
     events:
       - websocket:
           route: $connect
   disconnectHandler:
-    handler: handler.disconnectHandler
+    handler: handler.disconnect
     events:
       - websocket:
           route: $disconnect
@@ -55,7 +56,7 @@ functions:
       - websocket:
           route: $default
   sendMessageHandler:
-    handler: handler.sendMessageHandler
+    handler: handler.sendMessage
     events:
       - websocket:
           route: sendMessage
