@@ -4,10 +4,20 @@ Serverless websocket API serving Finnhub live data. Deployed with [AWS Lambda](h
 
 ## Install
 
+> Requires Node >=16 (lts/gallium). If you are using [nvm](https://github.com/nvm-sh/nvm), then run `nvm install` from the project directoy
+
 ```sh
 git clone https://github.com/jseashell/finnhub-api.git
 cd finnhub-api
 npm install
+```
+
+## Test
+
+```sh
+# Run unit tests, watch available
+npm test
+npm run test:watch
 ```
 
 ## Environment
@@ -16,22 +26,20 @@ Environment variables are injected into the handler via [serverless.yml](./serve
 
 ## Deploy
 
-Deployment requires `aws configure` on the deployment workstation.
+Deployment requires `aws configure` on the deployment workstation
 
 ```sh
-npm run serverless -- deploy
+npx serverless deploy
 ```
 
 ## Test
 
-```sh
-npm run invoke:connect
-```
+Use [wscat](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html) to interact with the websocket channel.
 
-You should get a 200 response back. Clean up you connection with
+The `<websocketApiId>` is available in your `serverless deploy` output. Copy and paste it into the command below to use the websocket API from terminal.
 
 ```sh
-npm run invoke:disconnect
+wscat -c wss://<websocketApiId>.execute-api.us-east-1.amazonaws.com/dev
 ```
 
 ## License

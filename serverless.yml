@@ -35,12 +35,7 @@ provider:
           Action:
             - 'execute-api:ManageConnections'
           Resource:
-            - 'arn:aws:execute-api:${env:AWS_REGION}:${env.AWS_ACCOUNT_ID}:**/@connections/*'
-        - Effect: Allow
-          Action:
-            - 'execute-api:Invoke'
-          Resource:
-            - 'arn:aws:execute-api:${env:AWS_REGION}:${env.AWS_ACCOUNT_ID}:**'
+            - 'arn:aws:execute-api:*:*:**/@connections/*'
 
 package:
   individually: true

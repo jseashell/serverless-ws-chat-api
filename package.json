@@ -1,19 +1,21 @@
 {
   "name": "finnhub-api",
   "version": "0.0.1",
-  "description": "Serverless AWS websocket API providing Finnhub live data",
+  "description": "Serverless Websocket API providing Finnhub live data",
   "author": "John Schellinger",
   "private": true,
   "scripts": {
-    "serverless": "serverless",
-    "invoke:connect": "npm run serverless -- invoke local -f connectHandler -p mock.json",
-    "invoke:disconnect": "npm run serverless -- invoke local -f disconnectHandler -p mock.json"
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "format": "npx prettier --write *.js --ignore-path package*.json"
   },
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.87.0",
     "@aws-sdk/client-dynamodb": "^3.87.0"
   },
   "devDependencies": {
+    "jest": "^28.1.0",
+    "prettier": "^2.6.2",
     "serverless": "^3.17.0"
   }
 }
