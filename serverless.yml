@@ -1,8 +1,11 @@
 service: finnhub-api
 frameworkVersion: '3'
 
+useDotenv: true
+
 provider:
   name: aws
+  stage: ${env.STAGE}
   runtime: nodejs16.x
 
   websocketsApiName: ${self:service}
@@ -17,6 +20,7 @@ provider:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
     CONNECTION_TABLE: ${self:resources.Resources.FinnhubApiWsConnectionTable.Properties.TableName}
+    WEBSOCKET_API_ID: { Ref: WebsocketsApi }
   
   iam:
     role:
@@ -32,9 +36,13 @@ provider:
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
+          Resource:
+            - 'arn:aws:execute-api:${self:AWS_REGION}:${env.AWS_ACCOUNT_ID}:${self:WEBSOCKET_API_ID}/@connections/*'
+        - Effect: Allow
+          Action:
             - 'execute-api:Invoke'
           Resource:
-            - 'arn:aws:execute-api:*:*:**/@connections/*'
+            - 'arn:aws:execute-api:${self:AWS_REGION}:${env.AWS_ACCOUNT_ID}:${self:WEBSOCKET_API_ID}'
 
 package:
   individually: true
