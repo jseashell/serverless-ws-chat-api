@@ -16,14 +16,14 @@ const successfulResponse = {
   body: JSON.stringify({ message: 'success' }),
 };
 
-const formatJsonError = (statusCode, err) => {
+const formatJsonError = (statusCode, error) => {
   return {
     statusCode: statusCode,
     body: JSON.stringify({
       message: 'error',
       error: {
-        message: err.messge,
-        stack: err.stack,
+        message: error.message || error || 'Unknown error',
+        stack: error.stack || {},
       },
     }),
   };
@@ -33,10 +33,7 @@ module.exports.connect = (event, _context, callback) => {
   const connectionId = event.requestContext?.connectionId;
   if (!connectionId) {
     callback(
-      formatJsonError(
-        400,
-        `Cannot add connection. Invalid connection ID "${connectionId}"`
-      )
+      formatJsonError(400, 'Cannot add connection due to falsy connection ID.')
     );
   }
 
