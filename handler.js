@@ -17,19 +17,25 @@ const successfulResponse = {
 };
 
 const formatJsonError = (statusCode, error) => {
+  console.dir(error);
   return {
     statusCode: statusCode,
     body: JSON.stringify({
       message: 'error',
       error: {
-        message: error.message || error || 'Unknown error',
+        message:
+          typeof error == 'string'
+            ? error
+            : error.message
+            ? error.message
+            : 'Unknown error',
         stack: error.stack || {},
       },
     }),
   };
 };
 
-module.exports.connect = (event, _context, callback) => {
+module.exports.connect = async (event, _context, callback) => {
   const connectionId = event.requestContext?.connectionId;
   if (!connectionId) {
     callback(
@@ -47,10 +53,13 @@ module.exports.connect = (event, _context, callback) => {
   });
 
   const client = new DynamoDBClient({ region: process.env.REGION });
-  client
-    .send(command)
-    .then(() => callback(null, successfulResponse))
-    .catch((err) => callback(formatJsonError(500, err)));
+
+  try {
+    await client.send(command);
+    callback(null, successfulResponse);
+  } catch (err) {
+    callback(formatJsonError(500, err));
+  }
 };
 
 module.exports.disconnect = (event) => {

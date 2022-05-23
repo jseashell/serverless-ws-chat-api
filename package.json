@@ -17,5 +17,10 @@
     "jest": "^28.1.0",
     "prettier": "^2.6.2",
     "serverless": "^3.17.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "./setup-tests.js"
+    ]
   }
 }
