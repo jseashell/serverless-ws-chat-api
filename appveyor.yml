@@ -1,0 +1,47 @@
+image: Ubuntu
+version: 0.1.0.{build}
+
+branches:
+  only:
+    - /.*/
+
+environment:
+  STAGE: dev
+  AWS_REGION: us-east-1
+  AWS_ACCESS_KEY_ID:
+    secure: YaEb8m87LlmMvmuP7ist7QLB4DS//lUTlMNzf3wL6dI=
+  AWS_SECRET_ACCESS_KEY:
+    secure: ceER808XvIxTANtUupVIv4DTSErDUfv9V3/4nEEvaFdtI7NfQEYb3RBcvssJroG9
+  SHOULD_DEPLOY: false
+
+for:
+  - branches:
+      only:
+        - dev
+    environment:
+      STAGE: dev
+      SHOULD_DEPLOY: true
+  - branches:
+      only:
+        - main
+    environment:
+      STAGE: main
+      SHOULD_DEPLOY: true
+
+install:
+  - sh: |
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+      nvm use $(cat .nvmrc)
+      npm install --quiet 
+      npx serverless --version
+
+build_script:
+  - sh: npm run test
+
+deploy_script:
+  - sh: |
+      if [ "$SHOULD_DEPLOY" = "true" ]; then
+        echo "Deploying $APPVEYOR_REPO_BRANCH stage"
+        npx serverless deploy --stage $STAGE
+      else
+        echo 'Detected feature branch. It will not be deployed'

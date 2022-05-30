@@ -5,6 +5,9 @@ const { connect } = require('./handler');
 // Mock wrapper libs
 jest.mock('../../libs/dynamodb');
 
+/**
+ * Tests for the connect handler
+ */
 describe('connect', () => {
   const mockConnectionId = 'example-id-000';
   const mockEvent = { requestContext: { connectionId: mockConnectionId } };

@@ -5,6 +5,9 @@ const { disconnect } = require('./handler');
 // Mock wrapper libs
 jest.mock('../../libs/dynamodb');
 
+/**
+ * Tests for the disconnect handler
+ */
 describe('disconnect', () => {
   const mockConnectionId = 'example-id-000';
   const mockEvent = { requestContext: { connectionId: mockConnectionId } };
