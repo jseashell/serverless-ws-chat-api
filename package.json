@@ -33,9 +33,6 @@
     "moduleDirectories": [
       "node_modules",
       "src"
-    ],
-    "setupFiles": [
-      "./setupTests.js"
     ]
   }
 }
