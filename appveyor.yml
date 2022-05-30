@@ -33,15 +33,20 @@ install:
       nvm use $(cat .nvmrc)
       npm install --quiet 
       npx serverless --version
+  - sh: |
+      curl -Os https://uploader.codecov.io/latest/linux/codecov
+      chmod +x codecov
 
 build_script:
-  - sh: npm run test
+  - sh: |
+      npm run test
+      ./codecov
 
 deploy_script:
   - sh: |
       if [ "$SHOULD_DEPLOY" = "true" ]; then
         echo "Deploying $APPVEYOR_REPO_BRANCH stage"
-        npx serverless deploy --stage $STAGE
+        npx serverless deploy --stage $STAGE --verbose
       else
         echo 'Detected feature branch. It will not be deployed'
       fi
