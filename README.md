@@ -1,5 +1,7 @@
 # Finnhub API
 
+[![Build status](https://ci.appveyor.com/api/projects/status/br0ka84i48rapdcf?svg=true)](https://ci.appveyor.com/project/jseashell/finnhub-api)
+
 Serverless websocket API serving Finnhub live data. Deployed with [AWS Lambda](https://aws.amazon.com/lambda/) and [Serverless Framework](https://serverless.com).
 
 ## Install
