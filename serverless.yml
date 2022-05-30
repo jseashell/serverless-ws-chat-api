@@ -10,16 +10,16 @@ provider:
   websocketsApiName: ${self:service}
   websocketsApiRouteSelectionExpression: $request.body.action # custom routes are selected by the value of the action property in the body
   websocketsDescription: Finnhub Websocket API
-  
+
   logs:
     frameworkLambda: true
     websocket: true
-  
+
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
     CONNECTION_TABLE: ${self:resources.Resources.FinnhubApiWsConnectionTable.Properties.TableName}
-  
+
   iam:
     role:
       statements:
@@ -57,12 +57,13 @@ functions:
       - websocket:
           route: $default
   send:
-    handler: handler.send
+    handler: ./src/functions/send/handler.send
     events:
       - websocket:
           route: send
           routeResponseSelectionExpression: $default
-
+  webhook:
+    handler: ./src/functions/webhook/handler.webhook
 resources:
   Resources:
     FinnhubApiWsConnectionTable:

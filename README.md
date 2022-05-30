@@ -2,6 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/br0ka84i48rapdcf?svg=true)](https://ci.appveyor.com/project/jseashell/finnhub-api)
 [![codecov](https://codecov.io/gh/jseashell/finnhub-api/branch/dev/graph/badge.svg?token=T7DDM5BHFV)](https://codecov.io/gh/jseashell/finnhub-api)
+[![Known Vulnerabilities](https://snyk.io/test/github/jseashell/finnhub-api/badge.svg)](https://snyk.io/test/github/jseashell/finnhub-api/badge.svg)
 
 Serverless websocket API serving Finnhub live data. Deployed with [AWS Lambda](https://aws.amazon.com/lambda/) and [Serverless Framework](https://serverless.com).
 
