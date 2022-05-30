@@ -44,3 +44,4 @@ deploy_script:
         npx serverless deploy --stage $STAGE
       else
         echo 'Detected feature branch. It will not be deployed'
+      fi
