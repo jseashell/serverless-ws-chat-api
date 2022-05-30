@@ -2,6 +2,7 @@ const { successfulResponse } = require('../../libs/api-gateway');
 const { deleteItem } = require('../../libs/dynamodb');
 const { disconnect } = require('./handler');
 
+// Mock wrapper libs
 jest.mock('../../libs/dynamodb');
 
 describe('disconnect', () => {

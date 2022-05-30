@@ -5,13 +5,20 @@ const {
 const { scan } = require('../../libs/dynamodb');
 const { send } = require('./handler');
 
+// Mock wrapper libs
 jest.mock('../../libs/api-gateway');
 jest.mock('../../libs/dynamodb');
 
+/**
+ * Tests for the send handler
+ */
 describe('send', () => {
-  const mockEvent = { body: JSON.stringify({ data: 'a message to send' }) };
+  const mockEvent = {
+    body: JSON.stringify({ data: { message: 'a message to send' } }),
+  };
   const mockContext = null; // unused in handler.js
   const mockConnections = [
+    // at least 2 mocked database items with connection IDs
     {
       connectionId: {
         S: 'example-id-000',

@@ -1,12 +1,18 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 
-const connectionTable = process.env.CONNECTION_TABLE;
-
+/**
+ * @return a new DynamoDBClient to send commands to
+ */
 const newClient = () => new DynamoDBClient({ region: process.env.REGION });
 
-module.exports.putItem = (connectionId) => {
+/**
+ * Puts a connection ID in the database
+ * @param {string} connectionId to insert
+ * @returns a Promise containing the inserted database item
+ */
+module.exports.putItem = async (connectionId) => {
   const command = new PutItemCommand({
-    TableName: connectionTable,
+    TableName: process.env.CONNECTION_TABLE,
     Item: {
       connectionId: {
         S: connectionId,
@@ -17,9 +23,14 @@ module.exports.putItem = (connectionId) => {
   return newClient().send(command);
 };
 
-module.exports.deleteItem = (connectionId) => {
+/**
+ * Deletes a connection ID in the database
+ * @param {string} connectionId to delete
+ * @returns a Promise containing the deleted database item
+ */
+module.exports.deleteItem = async (connectionId) => {
   const command = new DeleteItemCommand({
-    TableName: connectionTable,
+    TableName: process.env.CONNECTION_TABLE,
     Key: {
       connectionId: {
         S: connectionId,
@@ -30,9 +41,13 @@ module.exports.deleteItem = (connectionId) => {
   return newClient().send(command);
 };
 
+/**
+ * Scans the databse for all items with a connection ID property
+ * @returns a Promise containing database items
+ */
 module.exports.scan = async () => {
   const command = new ScanCommand({
-    TableName: connectionTable,
+    TableName: process.env.CONNECTION_TABLE,
     ProjectionExpression: 'connectionId',
   });
 

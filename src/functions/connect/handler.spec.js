@@ -2,6 +2,7 @@ const { successfulResponse } = require('../../libs/api-gateway');
 const { putItem } = require('../../libs/dynamodb');
 const { connect } = require('./handler');
 
+// Mock wrapper libs
 jest.mock('../../libs/dynamodb');
 
 describe('connect', () => {

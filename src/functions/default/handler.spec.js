@@ -1,5 +1,8 @@
 const { defaultHandler } = require('./handler');
 
+/**
+ * Tests for the default handler
+ */
 describe('defaultHandler', () => {
   const mockConnectionId = 'example-id-000';
   const mockEvent = { requestContext: { connectionId: mockConnectionId } };
