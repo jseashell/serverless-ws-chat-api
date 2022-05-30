@@ -15,6 +15,10 @@ describe('connect', () => {
     putItem.mockImplementationOnce(mockSend);
   });
 
+  afterAll(() => {
+    jest.resetAllMocks();
+  });
+
   it("should insert the client's connection ID into an RDS database", async () => {
     const callback = jest.fn();
     await connect(mockEvent, mockContext, callback);

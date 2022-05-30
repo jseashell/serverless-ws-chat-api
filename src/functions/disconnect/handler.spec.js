@@ -15,6 +15,10 @@ describe('disconnect', () => {
     deleteItem.mockImplementationOnce(mockSend);
   });
 
+  afterAll(() => {
+    jest.resetAllMocks();
+  });
+
   it("should remove the client's connection ID from an RDS database", async () => {
     const callback = jest.fn();
     await disconnect(mockEvent, mockContext, callback);
