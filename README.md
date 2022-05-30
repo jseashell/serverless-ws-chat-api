@@ -45,6 +45,9 @@ wscat -c <aws-endpoint>
 # Run unit tests, watch available
 npm test
 npm run test:watch
+
+# Run security tests
+npm run snyk
 ```
 
 ## Environment

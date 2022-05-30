@@ -12,6 +12,8 @@ environment:
     secure: YaEb8m87LlmMvmuP7ist7QLB4DS//lUTlMNzf3wL6dI=
   AWS_SECRET_ACCESS_KEY:
     secure: ceER808XvIxTANtUupVIv4DTSErDUfv9V3/4nEEvaFdtI7NfQEYb3RBcvssJroG9
+  SNYK_TOKEN:
+    secure: 9ff1FZB5xsovfQd4y4aiD+LHCY43z+D/p/kmQMQJEn/YAK22m9UsVJeL/o1GKpaP
   SHOULD_DEPLOY: false
 
 for:
@@ -25,7 +27,7 @@ for:
       only:
         - main
     environment:
-      STAGE: main
+      STAGE: prod
       SHOULD_DEPLOY: true
 
 install:
@@ -39,6 +41,7 @@ install:
 
 build_script:
   - sh: |
+      npx snyk
       npm run test
       ./codecov
 

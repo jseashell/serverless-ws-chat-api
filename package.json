@@ -8,6 +8,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "snyk": "npx snyk monitor",
     "format": "npx prettier --write *.js --ignore-path package*.json"
   },
   "dependencies": {
@@ -18,7 +19,8 @@
     "codecov": "^3.8.3",
     "jest": "^28.1.0",
     "prettier": "^2.6.2",
-    "serverless": "^3.17.0"
+    "serverless": "^3.17.0",
+    "snyk": "^1.942.0"
   },
   "jest": {
     "rootDir": ".",
