@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watchAll",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
     "format": "npx prettier --write *.js --ignore-path package*.json"
   },
   "dependencies": {
@@ -19,8 +20,22 @@
     "serverless": "^3.17.0"
   },
   "jest": {
+    "rootDir": ".",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "text-summary"
+    ],
+    "coverageDirectory": "coverage",
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
     "setupFiles": [
-      "./setup-tests.js"
+      "./setupTests.js"
     ]
   }
 }
