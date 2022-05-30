@@ -71,7 +71,7 @@ describe('send', () => {
     const mockPostToConnectionError = jest.fn().mockImplementation(() => {
       throw new Error('test');
     });
-    postToConnection.mockImplementationOnce(mockPostToConnectionError);
+    postToConnection.mockImplementation(mockPostToConnectionError);
 
     const mockErrorLog = jest.fn();
     console.error = mockErrorLog;
@@ -80,7 +80,7 @@ describe('send', () => {
     await send(mockEvent, mockContext, mockCallback);
 
     expect(mockScan).toHaveBeenCalled();
-    expect(mockPostToConnectionError).toHaveBeenCalled();
+    expect(mockPostToConnectionError).rejects;
     expect(mockErrorLog).toHaveBeenCalled();
     expect(mockCallback).toHaveBeenCalledWith(
       null,

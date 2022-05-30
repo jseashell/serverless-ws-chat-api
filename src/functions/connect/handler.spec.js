@@ -54,7 +54,7 @@ describe('connect', () => {
     const mockCallback = jest.fn();
     await connect(mockEvent, mockContext, mockCallback);
 
-    expect(mockSendError).toHaveBeenCalled();
+    expect(mockSendError).rejects;
     expect(mockCallback).toHaveBeenCalledWith(
       expect.objectContaining({
         statusCode: 500,

@@ -49,12 +49,12 @@ describe('disconnect', () => {
     const mockSendError = jest.fn().mockImplementation(() => {
       throw new Error('test');
     });
-    deleteItem.mockImplementationOnce(mockSendError);
+    deleteItem.mockImplementation(mockSendError);
 
     const mockCallback = jest.fn();
     await disconnect(mockEvent, mockContext, mockCallback);
 
-    expect(mockSendError).toHaveBeenCalled();
+    expect(mockSendError).rejects;
     expect(mockCallback).toHaveBeenCalledWith(
       expect.objectContaining({
         statusCode: 500,

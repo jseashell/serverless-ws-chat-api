@@ -64,6 +64,11 @@ functions:
           routeResponseSelectionExpression: $default
   webhook:
     handler: ./src/functions/webhook/handler.webhook
+    events:
+      - http:
+          method: 'POST'
+          path: 'webhook'
+          cors: true
 resources:
   Resources:
     FinnhubApiWsConnectionTable:
