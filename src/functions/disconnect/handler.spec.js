@@ -1,5 +1,5 @@
-const { successfulResponse } = require('../../libs/api-gateway');
 const { deleteItem } = require('../../libs/dynamodb');
+const { successfulResponse } = require('../../libs/lambda');
 const { disconnect } = require('./handler');
 
 // Mock wrapper libs

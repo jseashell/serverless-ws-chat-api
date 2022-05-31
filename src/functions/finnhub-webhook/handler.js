@@ -3,28 +3,25 @@ const { scan } = require('../../libs/dynamodb');
 const { successfulResponse, formatJsonError } = require('../../libs/lambda');
 
 /**
- * WS send event handler. Enables clients to send data to all other clients in the connection pool
+ * Handles webhook events from Finnhub. Sends the event data to all clients in the WS connection pool (stored in a DynamoDB instance).
  *
- * @param {*} event Lambda Proxy event
- * @param {*} _context event content, unused
- * @param {*} callback Callback for API responses
- * @returns a Promised void
+ * @param {*} event
+ * @returns a Promise with an HTTP status code. 200 for successful events
  */
-module.exports.send = async (event, _context, callback) => {
+module.exports.finnhubWebhook = async (event) => {
   let data = JSON.parse(event.body).data; // Lambda Proxy integration always has a string body
   if (!data) {
-    callback(
-      formatJsonError(
-        400,
-        'Invalid body. Body must include a data property to send to other clients.'
-      )
+    return formatJsonError(
+      400,
+      'Invalid body. Body must include a data property to send to other clients.'
     );
-    return;
   }
 
   if (typeof data === 'object') {
     data = JSON.stringify(data);
   }
+
+  console.log('DATA', data);
 
   const connections = await scan();
   connections.Items?.forEach((connection) => {
@@ -34,6 +31,5 @@ module.exports.send = async (event, _context, callback) => {
       console.error(err);
     }
   });
-
-  callback(null, successfulResponse);
+  return successfulResponse;
 };

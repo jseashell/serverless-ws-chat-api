@@ -62,12 +62,12 @@ functions:
       - websocket:
           route: send
           routeResponseSelectionExpression: $default
-  webhook:
-    handler: ./src/functions/webhook/handler.webhook
+  finnhubWebhook:
+    handler: ./src/functions/finnhub-webhook/handler.finnhubWebhook
     events:
       - http:
           method: 'POST'
-          path: 'webhook'
+          path: 'finnhub'
           cors: true
 resources:
   Resources:

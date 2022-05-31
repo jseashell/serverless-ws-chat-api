@@ -1,9 +1,14 @@
-const {
-  formatJsonError,
-  successfulResponse,
-} = require('../../libs/api-gateway');
 const { putItem } = require('../../libs/dynamodb');
+const { successfulResponse, formatJsonError } = require('../../libs/lambda');
 
+/**
+ * WS connect event handler. Stores the request context's connection ID in an DynamoDB instance
+ *
+ * @param {*} event Lambda Proxy event
+ * @param {*} _context event content, unused
+ * @param {*} callback Callback for API responses
+ * @returns a Promised void
+ */
 module.exports.connect = async (event, _context, callback) => {
   const connectionId = event.requestContext?.connectionId;
   if (!connectionId) {

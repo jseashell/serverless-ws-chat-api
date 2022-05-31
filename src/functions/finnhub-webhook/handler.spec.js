@@ -1,20 +1,16 @@
+const { finnhubWebhook } = require('./handler');
 const { postToConnection } = require('../../libs/api-gateway');
 const { scan } = require('../../libs/dynamodb');
-const { successfulResponse } = require('../../libs/lambda');
-const { send } = require('./handler');
 
 // Mock wrapper libs
 jest.mock('../../libs/api-gateway');
 jest.mock('../../libs/dynamodb');
 
-/**
- * Tests for the send handler
- */
-describe('send', () => {
+describe('finnhubWebhook', () => {
   const mockEvent = {
-    body: JSON.stringify({ data: { message: 'a message to send' } }),
+    body: JSON.stringify({ data: { message: 'webhook message' } }),
   };
-  const mockContext = null; // unused in handler.js
+  const mockContext = {};
   const mockConnections = [
     // at least 2 mocked database items with connection IDs
     {
@@ -32,6 +28,8 @@ describe('send', () => {
   let mockPostToConnection;
 
   beforeEach(() => {
+    console.log = jest.fn();
+
     mockScan = jest.fn().mockResolvedValue({
       Items: mockConnections,
     });
@@ -45,30 +43,25 @@ describe('send', () => {
     jest.resetAllMocks();
   });
 
-  it('should callback a 200 success when the message is posted to all scanned connections', async () => {
-    const mockCallback = jest.fn();
-    await send(mockEvent, mockContext, mockCallback);
+  it('should return 200 after successfully invoking the send handler', async () => {
+    const response = await finnhubWebhook(mockEvent, mockContext);
 
     expect(mockScan).toHaveBeenCalled();
-    expect(mockPostToConnection).toHaveBeenCalledTimes(mockConnections.length);
-    expect(mockCallback).toHaveBeenCalledWith(null, successfulResponse);
+    expect(mockPostToConnection).toHaveBeenCalledTimes(2);
+    expect(response.statusCode).toBe(200);
   });
 
-  it('should callback a 400 error when data is not provided in the request body', async () => {
+  it('should return a 400 error when data is not provided in the request body', async () => {
     const invalidEvent = { body: JSON.stringify({ data: '' }) };
-    const mockCallback = jest.fn();
-    await send(invalidEvent, mockContext, mockCallback);
+
+    const response = await finnhubWebhook(invalidEvent, mockContext);
 
     expect(mockScan).not.toHaveBeenCalled();
     expect(mockPostToConnection).not.toHaveBeenCalled();
-    expect(mockCallback).toHaveBeenCalledWith(
-      expect.objectContaining({
-        statusCode: 400,
-      })
-    );
+    expect(response.statusCode).toBe(400);
   });
 
-  it('should log an error when sending to a single client fails', async () => {
+  it('should log errors when sending to a single client fails but still response with a 200', async () => {
     postToConnection.mockReset();
     const mockPostToConnectionError = jest.fn().mockImplementation(() => {
       throw new Error('test');
@@ -78,12 +71,11 @@ describe('send', () => {
     const mockErrorLog = jest.fn();
     console.error = mockErrorLog;
 
-    const mockCallback = jest.fn();
-    await send(mockEvent, mockContext, mockCallback);
+    const response = await finnhubWebhook(mockEvent, mockContext);
 
     expect(mockScan).toHaveBeenCalled();
     expect(mockPostToConnectionError).rejects;
     expect(mockErrorLog).toHaveBeenCalled();
-    expect(mockCallback).toHaveBeenCalledWith(null, successfulResponse);
+    expect(response.statusCode).toBe(200);
   });
 });

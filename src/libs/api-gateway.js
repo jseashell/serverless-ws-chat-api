@@ -1,35 +1,11 @@
-/**
- * A successful Lambda Proxy response
- */
-module.exports.successfulResponse = {
-  statusCode: 200,
-  body: JSON.stringify({ message: 'success' }),
-};
-
-/**
- * Formats a failure Lambda Proxy response
- * @param {number} statusCode the HTTP status code for the error. 400 for client errors. 500 for internal errors.
- * @param {*} error String or Error object representing the error
- * @returns
- */
-module.exports.formatJsonError = (statusCode, error) => ({
-  statusCode: statusCode,
-  body: JSON.stringify({
-    message: 'error',
-    error: {
-      message:
-        typeof error == 'string'
-          ? error
-          : error.message
-          ? error.message
-          : 'Unknown error',
-      stack: error.stack || {},
-    },
-  }),
-});
+const {
+  ApiGatewayManagementApiClient,
+  PostToConnectionCommand,
+} = require('@aws-sdk/client-apigatewaymanagementapi');
 
 /**
  * Sends data to the given connection ID using API Gateway Management
+ *
  * @param {*} event the Lambda Proxy request event
  * @param {*} connectionId the connection ID to send the data to
  * @param {*} data to send
