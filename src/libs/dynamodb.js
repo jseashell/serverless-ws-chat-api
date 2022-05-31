@@ -1,4 +1,9 @@
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const {
+  DeleteItemCommand,
+  DynamoDBClient,
+  PutItemCommand,
+  ScanCommand,
+} = require('@aws-sdk/client-dynamodb');
 
 /**
  * @return a new DynamoDBClient to send commands to
