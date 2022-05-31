@@ -41,7 +41,7 @@ install:
 
 build_script:
   - sh: |
-      npx snyk
+      npm run snyk
       npm run test
       ./codecov
 
