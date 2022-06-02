@@ -9,7 +9,7 @@ const { disconnect } = require('../disconnect/handler');
  * @param {*} event
  * @returns a Promise with an HTTP status code. 200 for successful events
  */
-module.exports.finnhubWebhook = async (event) => {
+module.exports.finnhubWebhook = async (event, context, callback) => {
   let data = JSON.parse(event.body).data; // Lambda Proxy integration always has a string body
   if (!data) {
     return formatJsonError(
@@ -22,9 +22,9 @@ module.exports.finnhubWebhook = async (event) => {
     data = JSON.stringify(data);
   }
 
-  connect(event)
+  connect(event, context, callback)
     .then(() => console.log('webhook connected'))
-    .then(() => disconnect(event))
+    .then(() => disconnect(event, context, callback))
     .catch((err) => console.error(err));
 
   const connections = await scan();
