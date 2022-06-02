@@ -10,6 +10,7 @@ const { successfulResponse, formatJsonError } = require('../../libs/lambda');
  * @returns a Promised void
  */
 module.exports.disconnect = async (event, _context, callback) => {
+  console.log('EVENT');
   const connectionId = event.requestContext?.connectionId;
   if (!connectionId) {
     callback(

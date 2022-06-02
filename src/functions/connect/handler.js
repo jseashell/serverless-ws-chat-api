@@ -11,6 +11,7 @@ const { successfulResponse, formatJsonError } = require('../../libs/lambda');
  */
 module.exports.connect = async (event, _context, callback) => {
   const connectionId = event.requestContext?.connectionId;
+  console.log('EVENT', event);
   if (!connectionId) {
     callback(
       formatJsonError(400, 'Cannot add connection due to falsy connection ID.')

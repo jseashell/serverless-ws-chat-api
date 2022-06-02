@@ -1,7 +1,8 @@
 const { postToConnection } = require('../../libs/api-gateway');
 const { scan } = require('../../libs/dynamodb');
 const { successfulResponse, formatJsonError } = require('../../libs/lambda');
-
+const { connect } = require('../connect/handler');
+const { disconnect } = require('../disconnect/handler');
 /**
  * Handles webhook events from Finnhub. Sends the event data to all clients in the WS connection pool (stored in a DynamoDB instance).
  *
@@ -20,6 +21,11 @@ module.exports.finnhubWebhook = async (event) => {
   if (typeof data === 'object') {
     data = JSON.stringify(data);
   }
+
+  connect(event)
+    .then(() => console.log('webhook connected'))
+    .then(() => disconnect(event))
+    .catch((err) => console.error(err));
 
   const connections = await scan();
   connections.Items?.forEach(async (connection) => {
