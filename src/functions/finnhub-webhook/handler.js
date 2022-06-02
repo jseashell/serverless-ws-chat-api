@@ -22,10 +22,16 @@ module.exports.finnhubWebhook = async (event) => {
     data = JSON.stringify(data);
   }
 
-  const ws = new WebSocket(
-    'wss://2jhr8v1488.execute-api.us-east-1.amazonaws.com/dev'
-  );
-  ws.send({ action: 'send', data: data });
+  let sent = false;
+  ws.on('open', function open() {
+    ws.send('something');
+    sent = true;
+  });
+
+  while (!sent) {
+    setTimeout(() => console.log('waiting for socket to open'), 1000);
+  }
+  console.log('sent!');
   ws.close();
 
   return successfulResponse;
