@@ -22,9 +22,9 @@ module.exports.finnhubWebhook = async (event) => {
   }
 
   const connections = await scan();
-  connections.Items?.forEach((connection) => {
+  connections.Items?.forEach(async (connection) => {
     try {
-      postToConnection(event, connection.connectionId?.S, data);
+      await postToConnection(event, connection.connectionId?.S, data);
     } catch (err) {
       console.error(err);
     }
