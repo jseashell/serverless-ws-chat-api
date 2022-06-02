@@ -30,7 +30,7 @@ npm install
 
 ## Usage
 
-[Deploy](#deploy) to AWS, then use [wscat](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html) to interact with the websocket channel.
+[Deploy](#deploy) to AWS, then use [wscat](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html) to interact with the websocket.
 
 The `<aws-endpoint>` is available in your `serverless deploy` output. Copy and paste it into the command below to use the websocket API from terminal.
 
