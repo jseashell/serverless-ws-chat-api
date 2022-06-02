@@ -21,8 +21,6 @@ module.exports.finnhubWebhook = async (event) => {
     data = JSON.stringify(data);
   }
 
-  console.log('DATA', data);
-
   const connections = await scan();
   connections.Items?.forEach((connection) => {
     try {
