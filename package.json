@@ -1,7 +1,7 @@
 {
-  "name": "finnhub-api",
+  "name": "market-news-chat-api",
   "version": "0.0.1",
-  "description": "Serverless Websocket API providing Finnhub live data",
+  "description": "Serverless Websocket API providing live chat functionality for Market News",
   "author": "John Schellinger",
   "private": true,
   "scripts": {

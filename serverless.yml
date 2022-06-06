@@ -1,4 +1,4 @@
-service: finnhub-api
+service: market-news-chat-api
 frameworkVersion: '3'
 
 useDotenv: true
@@ -9,7 +9,7 @@ provider:
 
   websocketsApiName: ${self:service}
   websocketsApiRouteSelectionExpression: $request.body.action # custom routes are selected by the value of the action property in the body
-  websocketsDescription: Finnhub Websocket API
+  websocketsDescription: Market News API for streaming live chat data
 
   logs:
     frameworkLambda: true
@@ -18,7 +18,7 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
-    CONNECTION_TABLE: ${self:resources.Resources.FinnhubApiWsConnectionTable.Properties.TableName}
+    CONNECTION_TABLE: ${self:resources.Resources.MarketNewsChatApiWsConnectionTable.Properties.TableName}
 
   iam:
     role:
@@ -30,7 +30,7 @@ provider:
             - 'dynamodb:DeleteItem'
             - 'dynamodb:Scan'
           Resource:
-            - Fn::GetAtt: [FinnhubApiWsConnectionTable, Arn]
+            - Fn::GetAtt: [MarketNewsChatApiWsConnectionTable, Arn]
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
@@ -62,19 +62,12 @@ functions:
       - websocket:
           route: send
           routeResponseSelectionExpression: $default
-  finnhubWebhook:
-    handler: ./src/functions/finnhub-webhook/handler.finnhubWebhook
-    events:
-      - http:
-          method: 'POST'
-          path: 'finnhub'
-          cors: true
 resources:
   Resources:
-    FinnhubApiWsConnectionTable:
+    MarketNewsChatApiWsConnectionTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: FinnhubApiWsConnectionTable
+        TableName: MarketNewsChatApiWsConnectionTable
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: 'connectionId'

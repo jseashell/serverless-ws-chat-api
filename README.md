@@ -1,10 +1,10 @@
-# Finnhub API
+# Market News Chat API
 
-[![Build status](https://ci.appveyor.com/api/projects/status/br0ka84i48rapdcf?svg=true)](https://ci.appveyor.com/project/jseashell/finnhub-api)
+[![Build status](https://ci.appveyor.com/api/projects/status/br0ka84i48rapdcf?svg=true)](https://ci.appveyor.com/project/jseashell/market-news-chat-api)
 [![codecov](https://codecov.io/gh/jseashell/finnhub-api/branch/dev/graph/badge.svg?token=T7DDM5BHFV)](https://codecov.io/gh/jseashell/finnhub-api)
 [![Known Vulnerabilities](https://snyk.io/test/github/jseashell/finnhub-api/badge.svg)](https://snyk.io/test/github/jseashell/finnhub-api/badge.svg)
 
-Serverless websocket API serving Finnhub live data. Deployed with [AWS Lambda](https://aws.amazon.com/lambda/) and [Serverless Framework](https://serverless.com).
+Serverless websocket API streaming live chat data for [Market News](https://github.com/jseashell/market-news). Deployed with [AWS Lambda](https://aws.amazon.com/lambda/) and [Serverless Framework](https://serverless.com).
 
 <details>
 <summary>Table of Contents</summary>
@@ -23,8 +23,8 @@ Serverless websocket API serving Finnhub live data. Deployed with [AWS Lambda](h
 > Requires Node >=16 (lts/gallium). If you are using [nvm](https://github.com/nvm-sh/nvm), then run `nvm install` from the project directoy
 
 ```sh
-git clone https://github.com/jseashell/finnhub-api.git
-cd finnhub-api
+git clone https://github.com/jseashell/market-news-chat-api.git
+cd market-news-chat-api
 npm install
 ```
 
