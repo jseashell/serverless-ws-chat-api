@@ -14,6 +14,8 @@ environment:
     secure: ceER808XvIxTANtUupVIv4DTSErDUfv9V3/4nEEvaFdtI7NfQEYb3RBcvssJroG9
   SNYK_TOKEN:
     secure: 9ff1FZB5xsovfQd4y4aiD+LHCY43z+D/p/kmQMQJEn/YAK22m9UsVJeL/o1GKpaP
+  CODECOV_TOKEN:
+    secure: FmqEfCU7TAhcdyDsRdOmv811QvAK0ttwRPyUrxM4U8nyKS99tZ9EEO4kbROTGuqx
   SHOULD_DEPLOY: false
 
 for:
