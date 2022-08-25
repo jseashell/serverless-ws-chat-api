@@ -1,7 +1,7 @@
 {
-  "name": "market-news-chat-api",
+  "name": "serverless-lambda-chat-api",
   "version": "0.0.1",
-  "description": "Serverless Websocket API providing live chat functionality for Market News",
+  "description": "Serverless AWS Lambda web socket API for streaming live chat data",
   "author": "John Schellinger",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.105.0",
-    "@aws-sdk/client-dynamodb": "^3.87.0",
+    "@aws-sdk/client-dynamodb": "^3.105.0",
     "ws": "^8.7.0"
   },
   "devDependencies": {
