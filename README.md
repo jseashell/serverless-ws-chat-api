@@ -1,10 +1,10 @@
-# Market News Chat API
+# Serverless Lambda Chat API
 
 [![Build status](https://ci.appveyor.com/api/projects/status/br0ka84i48rapdcf?svg=true)](https://ci.appveyor.com/project/jseashell/market-news-chat-api)
 [![codecov](https://codecov.io/gh/jseashell/finnhub-api/branch/dev/graph/badge.svg?token=T7DDM5BHFV)](https://codecov.io/gh/jseashell/finnhub-api)
 [![Known Vulnerabilities](https://snyk.io/test/github/jseashell/finnhub-api/badge.svg)](https://snyk.io/test/github/jseashell/finnhub-api/badge.svg)
 
-Serverless websocket API streaming live chat data for [Market News](https://github.com/jseashell/market-news). Deployed with [AWS Lambda](https://aws.amazon.com/lambda/) and [Serverless Framework](https://serverless.com).
+Serverless AWS Lambda web socket API for streaming live chat data. [Deploy](#deploy) with [AWS Lambda](https://aws.amazon.com/lambda/) and [Serverless Framework](https://serverless.com).
 
 <details>
 <summary>Table of Contents</summary>
@@ -23,8 +23,8 @@ Serverless websocket API streaming live chat data for [Market News](https://gith
 > Requires Node >=16 (lts/gallium). If you are using [nvm](https://github.com/nvm-sh/nvm), then run `nvm install` from the project directoy
 
 ```sh
-git clone https://github.com/jseashell/market-news-chat-api.git
-cd market-news-chat-api
+git clone https://github.com/jseashell/serverless-lambda-chat-api.git
+cd serverless-lambda-chat-api
 npm install
 ```
 
@@ -69,7 +69,7 @@ npx serverless deploy
 
 ### Remote
 
-CI/CD is serviced by [AppVeyor](https://appveyor.com/). Configuration, such as AWS IAM credentials, is kept in [appveyor.yml](./appveyor.yml). Only the `dev` and `main` branches are deployed.
+CI/CD can be serviced by [AppVeyor](https://appveyor.com/). You must login with your Github (or other supported provider) account to link the repository. Configuration, such as AWS IAM credentials, is kept in [appveyor.yml](./appveyor.yml). Only the `dev` and `main` branches are deployed.
 
 ## License
 
