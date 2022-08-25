@@ -1,4 +1,4 @@
-service: market-news-chat-api
+service: serverless-lambda-chat-api
 frameworkVersion: '3'
 
 useDotenv: true
@@ -18,7 +18,7 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
-    CONNECTION_TABLE: ${self:resources.Resources.MarketNewsChatApiWsConnectionTable.Properties.TableName}
+    CONNECTION_TABLE: ${self:resources.Resources.ServerlessLambdaChatApiWsConnectionTable.Properties.TableName}
 
   iam:
     role:
@@ -30,7 +30,7 @@ provider:
             - 'dynamodb:DeleteItem'
             - 'dynamodb:Scan'
           Resource:
-            - Fn::GetAtt: [MarketNewsChatApiWsConnectionTable, Arn]
+            - Fn::GetAtt: [ServerlessLambdaChatApiWsConnectionTable, Arn]
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
@@ -64,10 +64,10 @@ functions:
           routeResponseSelectionExpression: $default
 resources:
   Resources:
-    MarketNewsChatApiWsConnectionTable:
+    ServerlessLambdaChatApiWsConnectionTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: MarketNewsChatApiWsConnectionTable
+        TableName: ServerlessLambdaChatApiWsConnectionTable
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: 'connectionId'
