@@ -1,4 +1,4 @@
-# Serverless Chat API
+# Serverless Web Socket Chat API
 
 Proof-of-concept serverless web socket API for streaming live chat data. [Deploy](#deploy) with [AWS Lambda](https://aws.amazon.com/lambda/) and [Serverless Framework](https://serverless.com).
 
@@ -19,8 +19,8 @@ Proof-of-concept serverless web socket API for streaming live chat data. [Deploy
 > Requires Node >=16 (lts/gallium). If you are using [nvm](https://github.com/nvm-sh/nvm), then run `nvm install` from the project directoy
 
 ```sh
-git clone https://github.com/jseashell/serverless-lambda-chat-api.git
-cd serverless-lambda-chat-api
+git clone https://github.com/jseashell/serverless-ws-chat-api.git
+cd serverless-ws-chat-api
 npm install
 ```
 
