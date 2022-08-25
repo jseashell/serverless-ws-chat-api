@@ -1,6 +1,6 @@
-# Serverless Lambda Chat API
+# Serverless Chat API
 
-Serverless AWS Lambda web socket API for streaming live chat data. [Deploy](#deploy) with [AWS Lambda](https://aws.amazon.com/lambda/) and [Serverless Framework](https://serverless.com).
+Proof-of-concept serverless web socket API for streaming live chat data. [Deploy](#deploy) with [AWS Lambda](https://aws.amazon.com/lambda/) and [Serverless Framework](https://serverless.com).
 
 <details>
 <summary>Table of Contents</summary>
