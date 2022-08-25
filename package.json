@@ -1,7 +1,7 @@
 {
-  "name": "serverless-lambda-chat-api",
+  "name": "serverless-ws-chat-api",
   "version": "0.0.1",
-  "description": "Serverless AWS Lambda web socket API for streaming live chat data",
+  "description": "Serverless web socket API for streaming live chat data",
   "author": "John Schellinger",
   "private": true,
   "scripts": {
