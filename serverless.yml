@@ -1,4 +1,4 @@
-service: finnhub-api
+service: serverless-ws-chat-api
 frameworkVersion: '3'
 
 useDotenv: true
@@ -18,7 +18,7 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
     NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
-    CONNECTION_TABLE: ${self:resources.Resources.FinnhubApiWsConnectionTable.Properties.TableName}
+    CONNECTION_TABLE: ${self:resources.Resources.WsConnectionTable.Properties.TableName}
   
   iam:
     role:
@@ -30,7 +30,7 @@ provider:
             - 'dynamodb:DeleteItem'
             - 'dynamodb:Scan'
           Resource:
-            - Fn::GetAtt: [FinnhubApiWsConnectionTable, Arn]
+            - Fn::GetAtt: [WsConnectionTable, Arn]
         - Effect: Allow
           Action:
             - 'execute-api:ManageConnections'
@@ -42,22 +42,22 @@ package:
 
 functions:
   connect:
-    handler: handler.connect
+    handler: src/handler.connect
     events:
       - websocket:
           route: $connect
   disconnect:
-    handler: handler.disconnect
+    handler: src/handler.disconnect
     events:
       - websocket:
           route: $disconnect
   default:
-    handler: handler.defaultHandler
+    handler: src/handler.defaultHandler
     events:
       - websocket:
           route: $default
   send:
-    handler: handler.send
+    handler: src/handler.send
     events:
       - websocket:
           route: send
@@ -65,10 +65,10 @@ functions:
 
 resources:
   Resources:
-    FinnhubApiWsConnectionTable:
+    WsConnectionTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: FinnhubApiWsConnectionTable
+        TableName: WsConnectionTable
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: 'connectionId'
